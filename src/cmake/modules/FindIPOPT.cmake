@@ -59,17 +59,17 @@ elseif(UNIX OR MINGW)
     if(IPOPT_DIR_TEST)
         set(IPOPT_DIR $ENV{IPOPT_DIR} CACHE PATH "Path to IPOPT build directory")
     else()
-	find_path (IPOPT_DIR /include/coin/IpTNLP.hpp PATHS /usr [/usr/local])
+	find_path (IPOPT_DIR /include/coin-or/IpTNLP.hpp PATHS /usr [/usr/local])
         #set(IPOPT_DIR /usr            CACHE PATH "Path to IPOPT build directory")
     endif()
 
-    set(IPOPT_INCLUDE_DIRS ${IPOPT_DIR}/include/coin)
+    set(IPOPT_INCLUDE_DIRS ${IPOPT_DIR}/include/coin-or)
     find_library(IPOPT_LIBRARIES ipopt ${IPOPT_DIR}/lib
-                                       ${IPOPT_DIR}/lib/coin
+                                       ${IPOPT_DIR}/lib/coin-or
                                        NO_DEFAULT_PATH)
-									  
+
     if(IPOPT_LIBRARIES)
-        find_file(IPOPT_DEP_FILE ipopt_addlibs_cpp.txt ${IPOPT_DIR}/share/doc/coin/Ipopt
+        find_file(IPOPT_DEP_FILE ipopt_addlibs_cpp.txt ${IPOPT_DIR}/share/doc/coin-or/Ipopt
                                                        ${IPOPT_DIR}/share/coin/doc/Ipopt
                                                        NO_DEFAULT_PATH)
         mark_as_advanced(IPOPT_DEP_FILE)
@@ -86,8 +86,8 @@ elseif(UNIX OR MINGW)
             # use the find_library command in order to prepare rpath correctly
             foreach(LIB ${IPOPT_DEP})
                 find_library(IPOPT_SEARCH_FOR_${LIB} ${LIB} ${IPOPT_DIR}/lib
-                                                            ${IPOPT_DIR}/lib/coin
-                                                            ${IPOPT_DIR}/lib/coin/ThirdParty
+                                                            ${IPOPT_DIR}/lib/coin-or
+                                                            ${IPOPT_DIR}/lib/coin-or/ThirdParty
                                                             NO_DEFAULT_PATH)
                 if(IPOPT_SEARCH_FOR_${LIB})
                     # handle non-system libraries (e.g. coinblas)
@@ -108,7 +108,7 @@ elseif(UNIX OR MINGW)
 else()
 
     set(IPOPT_DIR $ENV{IPOPT_DIR} CACHE PATH "Path to IPOPT build directory")
-	
+
     set(IPOPT_INCLUDE_DIRS ${IPOPT_DIR}/include/coin)
     find_library(IPOPT_LIBRARIES_RELEASE libipopt  ${IPOPT_DIR}/lib
                                                    ${IPOPT_DIR}/lib/coin
@@ -117,28 +117,28 @@ else()
                                                    ${IPOPT_DIR}/lib/coin
                                                    NO_DEFAULT_PATH)
 
-												   
+
 	#find_library(IPOPT_COINHSL_RELEASE libcoinhsl  ${IPOPT_DIR}/lib
     #                                               ${IPOPT_DIR}/lib/coin
     #                                               NO_DEFAULT_PATH)
-												   
+
 	#find_library(IPOPT_MUMPS_RELEASE libcoinmumps  ${IPOPT_DIR}/lib
     #                                                  ${IPOPT_DIR}/lib/coin
     #                                                  NO_DEFAULT_PATH)
-													   
+
 	#find_library(IPOPT_LAPACK_RELEASE libcoinlapack  ${IPOPT_DIR}/lib
 	#												   ${IPOPT_DIR}/lib/coin
 	#												   NO_DEFAULT_PATH)
-													   
+
     #find_library(IPOPT_BLAS_RELEASE libcoinblas  ${IPOPT_DIR}/lib
     #										   ${IPOPT_DIR}/lib/coin
     #										   NO_DEFAULT_PATH)
-	
+
     #find_library(IPOPT_METIS_RELEASE libcoinmetis  ${IPOPT_DIR}/lib
 	#										   ${IPOPT_DIR}/lib/coin
-	#										   NO_DEFAULT_PATH)	
+	#										   NO_DEFAULT_PATH)
 
-												   
+
     if(IPOPT_LIBRARIES_RELEASE AND IPOPT_LIBRARIES_DEBUG)
         set(IPOPT_LIBRARIES optimized ${IPOPT_LIBRARIES_RELEASE} debug ${IPOPT_LIBRARIES_DEBUG})
     elseif(IPOPT_LIBRARIES_RELEASE)
@@ -146,8 +146,8 @@ else()
     elseif(IPOPT_LIBRARIES_DEBUG)
         set(IPOPT_LIBRARIES ${IPOPT_LIBRARIES_DEBUG})
     endif()
-	
-	
+
+
 	#set(IPOPT_LIBRARIES ${IPOPT_LIBRARIES} ${IPOPT_COINHSL_RELEASE} ${IPOPT_MUMPS_RELEASE} ${IPOPT_LAPACK_RELEASE} ${IPOPT_BLAS_RELEASE} ${IPOPT_METIS_RELEASE} -lgfortran)
 
     set(IPOPT_LIBRARIES_RELEASE "")
@@ -169,7 +169,3 @@ mark_as_advanced(IPOPT_INCLUDE_DIRS
 
 include(FindPackageHandleStandardArgs)
 find_package_handle_standard_args(IPOPT DEFAULT_MSG IPOPT_LIBRARIES)
-
-
-
-
